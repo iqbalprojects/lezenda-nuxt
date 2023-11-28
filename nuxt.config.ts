@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import axios from "axios";
+import { config } from "./config";
 
 export default defineNuxtConfig({
     css: ["~/assets/css/main.css"],
@@ -25,7 +26,7 @@ export default defineNuxtConfig({
         modules: ["navigation", "pagination", "free-mode"],
     },
     site: {
-        url: "https://lezenda.netlify.app",
+        url: `https://${config.customDomain}`,
     },
     sitemap: {
         // provide dynamic URLs to be included
@@ -36,7 +37,10 @@ export default defineNuxtConfig({
         ],
         urls: async () => {
             const { data: posts }: any = await axios.get(
-                "https://s2fb.lezenda.com/api/v1/lezenda.com/posts"
+                config.apiDomain +
+                    config.apiPath +
+                    config.customDomain +
+                    "/posts"
             );
             return posts.posts.data.map((page: any) => ({
                 loc: `/posts/${page.path}`,
